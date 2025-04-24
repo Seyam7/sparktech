@@ -38,6 +38,7 @@ dependencies:
   get: ^4.7.2
   dartz: ^0.10.1
   connectivity_plus: ^6.1.4
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
