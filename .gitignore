@@ -175,3 +175,14 @@ windows/flutter/generated_plugins.cmake
 *.swift
 *.lock
 *.cc
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+ios/Runner.xcodeproj/project.pbxproj
+ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme
+ios/Runner.xcworkspace/contents.xcworkspacedata
+macos/Flutter/Flutter-Debug.xcconfig
+macos/Flutter/Flutter-Release.xcconfig
+macos/Flutter/GeneratedPluginRegistrant.swift
+pubspec.lock
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
