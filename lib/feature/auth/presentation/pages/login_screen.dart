@@ -1,42 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:sparktech_flutter/screens/create_account_screen.dart';
-import 'package:sparktech_flutter/screens/personalizing_course_screen.dart';
-import 'package:sparktech_flutter/widgets/header_widget.dart';
+import 'package:get/get.dart';
 
-class LoginScreen extends StatefulWidget {
+import '../../../../screens/create_account_screen.dart';
+import '../controllers/login_controller.dart';
+import '../widgets/header_widget.dart';
+
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
-
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  static String routeName = '/login';
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<LoginController>();
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+    final _obscurePassword = true.obs;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            HeaderWidget(),
+            const HeaderWidget(),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-
                     const Text(
                       'Log In',
                       style: TextStyle(
@@ -45,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 24),
                     const SizedBox(height: 24),
                     const Text('Email'),
                     const SizedBox(height: 8),
@@ -60,22 +50,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 16),
                     const Text('Password'),
                     const SizedBox(height: 8),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: '••••••',
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                            color: Colors.grey,
+                    Obx(
+                      () => TextField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword.value,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          hintText: '••••••',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword.value
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              _obscurePassword.value = !_obscurePassword.value;
+                            },
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
                         ),
                       ),
                     ),
@@ -89,26 +81,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => const PersonalizingCourseScreen()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    Obx(
+                      () => ElevatedButton(
+                        onPressed: controller.isLoading.value
+                            ? null
+                            : () {
+                                controller.login(
+                                  _emailController.text.trim(),
+                                  _passwordController.text.trim(),
+                                );
+                              },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ),
+                        child: controller.isLoading.value
+                            ? const CircularProgressIndicator(
+                                color: Colors.white)
+                            : const Text('Log In'),
                       ),
-                      child: const Text('Log In'),
+                    ),
+                    Obx(
+                      () => controller.errorMessage.isNotEmpty
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                controller.errorMessage.value,
+                                style: const TextStyle(color: Colors.red),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     ),
                     const SizedBox(height: 16),
                     OutlinedButton.icon(
                       onPressed: () {
+                        // Google login logic
                       },
-                      icon: Image.asset('assets/images/google_logo.png', height: 24),
+                      icon: Image.asset('assets/images/google_logo.png',
+                          height: 24),
                       label: const Text('Login with Google'),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -124,9 +139,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         const Text('New to Learnova? '),
                         InkWell(
-                          onTap:(){
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => const CreateAccountScreen()));
+                          onTap: () {
+                            Get.to(() => const CreateAccountScreen());
                           },
                           child: const Text(
                             'Create an Account',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sparktech_flutter/screens/login_screen.dart';
-import 'package:sparktech_flutter/widgets/header_widget.dart';
+import 'package:sparktech_flutter/feature/auth/presentation/pages/login_screen.dart';
+import 'package:sparktech_flutter/feature/auth/presentation/widgets/header_widget.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -28,7 +28,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-
                     const Text(
                       'Create Account',
                       style: TextStyle(
@@ -38,7 +37,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
-
                     const Text('Name'),
                     const SizedBox(height: 8),
                     TextField(
@@ -71,7 +69,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         hintText: '••••••',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -93,7 +93,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         hintText: '••••••',
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -125,9 +127,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       children: [
                         const Text('Already have an account? '),
                         InkWell(
-                          onTap:(){
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (context) => const LoginScreen()));
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginScreen()));
                           },
                           child: const Text(
                             'Log In',
